@@ -45,57 +45,37 @@ class NimAI():
         self.update_q_value(old_state, action, old_q, reward, best_future_q)
 
     def get_q_value(self, state, action):
-        """
-    Return the Q-value for a given state-action pair.
-    
-    Parameters:
-        state (list): The current game state.
-        action (tuple): The action being evaluated.
+        for i in self.q:
+            if i == (state,action):
+                return self.q[i]
+        return 0
 
-    Returns:
-        float: The Q-value associated with the (state, action) pair. 
-               Returns 0 if the pair is not yet in the Q-table.
-    """
-        print(self.q)
 
     def update_q_value(self, state, action, old_q, reward, future_q):
-        """
-    Update the Q-value for a state-action pair using the Q-learning formula.
-    
-    Parameters:
-        state (list): The current game state.
-        action (tuple): The action taken.
-        old_q (float): The previous Q-value for the (state, action) pair.
-        reward (float): The reward received after taking the action.
-        future_q (float): The maximum Q-value for the next state.
-    """
-        raise NotImplementedError
+        self.q[tuple(state), action] = old_q + self.alpha * ((reward + future_q) - old_q)
+
     
     def best_future_reward(self, state):
-            """
-    Determine the highest Q-value among all possible actions in a given state.
-    
-    Parameters:
-        state (list): The state for which to compute the best future reward.
-        
-    Returns:
-        float: The highest Q-value among available actions. 
-               Returns 0 if no actions are available.
-    """
-            raise NotImplementedError
+        q_max= -2
+        action=[]
+        z= len(state)
+        x=0
+        while x<=z:
+            pile= state[x]
+            for y in range(pile, 0 , -1): #<=Syntax von For-Schleife pirateriert von Valentin
+                 action.append((x, y))
+            x=x+1
+        if action:
+            for i in action:
+                q= self.get_q_value(state, i)
+                q_max=max(q, q_max)
+                return q_max
+        return 0
 
     def choose_action(self, state, epsilon=True):
-        """
-    Choose an action for the given state using an epsilon-greedy strategy.
-    
-    Parameters:
-        state (list): The current game state.
-        epsilon (bool): If True, use epsilon-greedy exploration; otherwise, choose the best action.
-    
-    Returns:
-        tuple: The chosen action from the available actions.
-    """
-        raise NotImplementedError
+        actions=[]
+        return 0
+        #nicht geschafft wenn ich ehrlich bin
 
 def train(n):
     player = NimAI()
@@ -121,3 +101,7 @@ def train(n):
                 player.update(last_move[game.player]["state"], last_move[game.player]["action"], new_state, 0)
 
     return player
+
+X = NimAI()
+f=X.get_q_value((0,0,0,2),(3,2))
+print(f)
